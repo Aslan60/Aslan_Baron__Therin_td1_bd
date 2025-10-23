@@ -1,27 +1,24 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 
-const indexRoutes = require('./routes/index');
-const createMessageRoutes = require('./routes/createMessage');
-const createAnswerRoutes = require('./routes/createAnswer');
-const listMessageRoutes = require('./routes/listMessage');
+const userRoutes = require('./routes/userRoutes');
+const postRoutes = require('./routes/postRoutes');
 const addMessageRoutes = require('./routes/addMessage');
-
 
 const app = express();
 app.use(express.json());
+app.use(express.static('views')); // pour servir le HTML statique
 
 mongoose.connect('mongodb://127.0.0.1:27017/TP1-MongoSharding', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log('✅ Connecté à MongoDB'))
+.then(() => console.log('✅ MongoDB connecté'))
 .catch(err => console.error('❌ Erreur MongoDB :', err));
 
-app.use('/index', indexRoutes);
-app.use('/createMessage', createMessageRoutes);
-app.use('/createAnswer', createAnswerRoutes);
-app.use('/listMessage', listMessageRoutes);
+app.use('/users', userRoutes);
+app.use('/posts', postRoutes);
 app.use('/addMessage', addMessageRoutes);
 
 const PORT = 3000;
